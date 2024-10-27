@@ -5,6 +5,7 @@ import 'package:todo_app/Components/HelperUtil.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Model/Task.dart';
 import 'package:todo_app/Views/newTask.dart';
+import 'package:todo_app/Views/singleTask.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -158,32 +159,38 @@ class _HomeState extends State<HomeScreen>{
                   itemCount: taskModel.getTaskByFilter(mode).length,
                   itemBuilder: (BuildContext context, int index){
                     final task = taskModel.getTaskByFilter(mode);
-                    return Card(
-                      color: (task[index].taskStatus == StatusType.DONE ? Colorstyle().doneTaskLightColor: (task[index].taskStatus == StatusType.OVERDUE ? Colorstyle().overdueTaskLightColor : Colorstyle().upcommingTaskLightColor)),
-                      child: ListTile(
-                        trailing: Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Column(
-                          children: [
-                            Icon( (task[index].taskReminder != 0) ? Icons.timer_outlined : Icons.timer_off_outlined),
-                            Text(
-                              task[index].taskTime.format(context),
-                              style: TextStyle(
-                                fontSize: 14,
+                    return GestureDetector(
+                      onTap: (){
+                        int position = taskModel.findTaskInList(task[index].taskId);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SingletaskScreen(index: position, data: taskModel.get()[position],)));
+                      },
+                      child: Card(
+                        color: (task[index].taskStatus == StatusType.DONE ? Colorstyle().doneTaskLightColor: (task[index].taskStatus == StatusType.OVERDUE ? Colorstyle().overdueTaskLightColor : Colorstyle().upcommingTaskLightColor)),
+                        child: ListTile(
+                          trailing: Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: Column(
+                            children: [
+                              Icon( (task[index].taskReminder != 0) ? Icons.timer_outlined : Icons.timer_off_outlined),
+                              Text(
+                                task[index].taskTime.format(context),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        ),
-                        title: Text(
-                          task[index].taskTitle,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: task[index].taskStatus == StatusType.DONE ? Colorstyle().doneTaskColor: (task[index].taskStatus == StatusType.OVERDUE ? Colorstyle().overdueTaskColor : Colorstyle().upcommingTaskColor)
+                            ],
                           ),
+                          ),
+                          title: Text(
+                            task[index].taskTitle,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: task[index].taskStatus == StatusType.DONE ? Colorstyle().doneTaskColor: (task[index].taskStatus == StatusType.OVERDUE ? Colorstyle().overdueTaskColor : Colorstyle().upcommingTaskColor)
+                            ),
+                          ),
+                          subtitle: Text(Helperutil().convertToShortString(task[index].taskDescription)),
                         ),
-                        subtitle: Text(Helperutil().convertToShortString(task[index].taskDescription)),
                       ),
                     );
                   }

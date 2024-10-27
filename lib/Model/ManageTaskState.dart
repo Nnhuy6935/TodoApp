@@ -22,7 +22,6 @@ class ManageTask with ChangeNotifier{
         output.add(appData[i]);
       }
     }
-    // notifyListeners();
     return output;  
   }
 
@@ -35,7 +34,6 @@ class ManageTask with ChangeNotifier{
         output.add(appData[i]);
       }
     }
-    // notifyListeners();
     return output;  
   }
 
@@ -46,5 +44,30 @@ class ManageTask with ChangeNotifier{
     if(mode == 1)
       return todayTasks();
     else return upcomingTasks();
+  }
+
+  int findTaskInList(String id){
+    for(int i = 0; i < appData.length; ++i){
+      if(appData[i].taskId == id)
+        return i;
+    }
+    return -1;
+  }
+  void deleteATask(int index){
+    appData.removeAt(index);
+    notifyListeners();
+  }
+  void updateATask(int index, String title, String description, DateTime date, TimeOfDay time, int reminder){
+    appData[index].taskTitle = title;
+    appData[index].taskDescription = description;
+    appData[index].taskDate = date;
+    appData[index].taskTime = time;
+    appData[index].taskReminder = reminder;
+    print("updated");
+    notifyListeners();
+  }
+  void updateTaskStatus(int index, StatusType status){
+    appData[index].taskStatus = status; 
+    notifyListeners();
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Views/homeScreen.dart';
 import 'package:todo_app/Views/newTask.dart';
+import 'package:todo_app/Views/singleTask.dart';
 
 void main() {
   runApp(
