@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/Model/ManageTaskState.dart';
+import 'package:todo_app/Views/homeScreen.dart';
+import 'package:todo_app/Views/newTask.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    // const MyApp()
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ManageTask())
+      ],
+      child: const MyApp(),  
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,8 +42,15 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "/",
+      routes: {
+        "/" : (context) => HomeScreen(),
+        "/addnew" : (context) => NewTaskScreen(),
+      },
+      // home: NewTaskScreen()
+      // const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
