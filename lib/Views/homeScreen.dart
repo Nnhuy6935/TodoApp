@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/Components/ColorStyle.dart';
 import 'package:todo_app/Components/HelperUtil.dart';
+import 'package:todo_app/Components/SearchLabel.dart';
+import 'package:todo_app/Model/ManageSearchBox.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Model/Task.dart';
-import 'package:todo_app/Views/newTask.dart';
 import 'package:todo_app/Views/singleTask.dart';
 
 class HomeScreen extends StatefulWidget{
@@ -21,9 +23,13 @@ class _HomeState extends State<HomeScreen>{
   Color unselectedText = Colorstyle().textColor2;
   List<Task> data = [];
   int mode = 0;
+  final searchController = TextEditingController();
+  // bool isShowSearchResult = false;
+  
   @override
   Widget build(BuildContext context) {
     final taskModel = Provider.of<ManageTask>(context);
+    final searchModel = Provider.of<Managesearchbox>(context);
     return Scaffold(
       backgroundColor: Colorstyle().bgColor,
       body: Center(
@@ -37,7 +43,8 @@ class _HomeState extends State<HomeScreen>{
                 children: [
                   Expanded(
                     child: TextField(
-                      obscureText: true,
+                      // obscureText: true,
+                      controller: searchController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderSide: BorderSide(),
@@ -48,7 +55,12 @@ class _HomeState extends State<HomeScreen>{
                     ),
                   ),
                   IconButton(
-                    onPressed: (){}, 
+                    onPressed: (){
+                      String keyword = searchController.value.text;
+                      print(keyword);
+                      searchModel.turnOnModeSearch(keyword);
+                      searchController.clear();
+                    }, 
                     icon: Icon(Icons.search)
                   )
                 ],
@@ -98,7 +110,7 @@ class _HomeState extends State<HomeScreen>{
                       width: 110,
                       margin: EdgeInsets.all(2),
                       child: ElevatedButton(
-                        onPressed: (){
+                        onPressed: (!searchModel.isShowSearchResult) ? (){
                           setState(() {
                             mode = 1;
                             for(int i = 0 ; i < buttonStatus.length; ++i){
@@ -107,7 +119,7 @@ class _HomeState extends State<HomeScreen>{
                               else buttonStatus[i] = false; 
                             }
                           });
-                        }, 
+                        } : null, 
                         child: Text(
                           "Today",
                           style: TextStyle(
@@ -126,7 +138,7 @@ class _HomeState extends State<HomeScreen>{
                       width: 110,
                       margin: EdgeInsets.all(2),
                       child: ElevatedButton(
-                        onPressed: (){
+                        onPressed: (!searchModel.isShowSearchResult) ? (){
                           setState((){
                             mode = 2;
                             for(int i = 0 ; i < buttonStatus.length; ++i){
@@ -135,7 +147,7 @@ class _HomeState extends State<HomeScreen>{
                               else buttonStatus[i] = false; 
                             }
                           });
-                        }, 
+                        } : null, 
                         child: Text(
                           "Upcoming",
                           style: TextStyle(
@@ -152,13 +164,21 @@ class _HomeState extends State<HomeScreen>{
                   ],
                 ),
               ),
+
+              //SEARCH MODE 
+              SearchLabel(),
+              SizedBox(height: 10,),
               // LIST NOTE 
               Expanded(
                 child: ListView.builder(
                   // itemCount: data.length,
-                  itemCount: taskModel.getTaskByFilter(mode).length,
+                  itemCount: (!searchModel.isShowSearchResult) ? taskModel.getTaskByFilter(mode).length : taskModel.findListTaskByKeyword(searchModel.keyword).length,
                   itemBuilder: (BuildContext context, int index){
-                    final task = taskModel.getTaskByFilter(mode);
+                    final task;
+                    if(searchModel.isShowSearchResult == false)
+                      task = taskModel.getTaskByFilter(mode);
+                    else
+                      task = taskModel.findListTaskByKeyword(searchModel.keyword); 
                     return GestureDetector(
                       onTap: (){
                         int position = taskModel.findTaskInList(task[index].taskId);

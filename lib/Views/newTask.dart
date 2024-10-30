@@ -4,7 +4,6 @@ import 'package:todo_app/Components/ColorStyle.dart';
 import 'package:todo_app/Components/HelperUtil.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Model/Task.dart';
-import 'package:todo_app/main.dart';
 
 class NewTaskScreen extends StatefulWidget{
   @override

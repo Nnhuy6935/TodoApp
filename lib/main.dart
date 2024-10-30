@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/Model/ManageSearchBox.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Views/homeScreen.dart';
 import 'package:todo_app/Views/newTask.dart';
@@ -10,7 +11,8 @@ void main() {
     // const MyApp()
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ManageTask())
+        ChangeNotifierProvider(create: (_) => ManageTask()),
+        ChangeNotifierProvider(create: (_) => Managesearchbox())
       ],
       child: const MyApp(),  
     )

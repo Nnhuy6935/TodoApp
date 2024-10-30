@@ -36,6 +36,16 @@ class ManageTask with ChangeNotifier{
     }
     return output;  
   }
+  List<Task> findListTaskByKeyword(String keyword){
+    List<Task> output = [];
+    for(int i = 0; i < appData.length; ++i){
+      if(appData[i].taskTitle.contains(keyword) || appData[i].taskDescription.contains(keyword)){
+        output.add(appData[i]);
+      }
+    }
+    return output;
+  }
+
 
   List<Task> getTaskByFilter(int mode){
     List<Task> output = [];
@@ -45,6 +55,7 @@ class ManageTask with ChangeNotifier{
       return todayTasks();
     else return upcomingTasks();
   }
+  
 
   int findTaskInList(String id){
     for(int i = 0; i < appData.length; ++i){
