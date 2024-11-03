@@ -43,8 +43,11 @@ class _SingleTaskState extends State<SingletaskScreen> {
   @override
   Widget build(BuildContext context) {
     final taskModel = Provider.of<ManageTask>(context);
+    print(taskModel.get()[index].taskIndex);
     print(taskModel.get()[index].taskTitle);
-
+    print(taskModel.get()[index].taskDate);
+    print(taskModel.get()[index].taskTime);
+    print(Helperutil().convertDateTimeToTzDateTime(taskModel.get()[index].taskDate).toString());
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
@@ -90,15 +93,16 @@ class _SingleTaskState extends State<SingletaskScreen> {
             TextButton(
               onPressed: (){
                 // CHANGE INFORMATION OF TASK
+                
+                // print(titleController.value.text);
+                // print(descConroller.value.text);
+                // print(selectedDate.toString());
+                // print(selectedTime.format(context));
+                // print(reminder);
                 setState(() {
+                  taskModel.updateATask(index, titleController.value.text, descConroller.value.text, Helperutil().combineDateTimeAndTimeOfDate(selectedDate,selectedTime), selectedTime, Helperutil().getNumberFromReminder(reminder));
                   editMode = false;
                 });
-                print(titleController.value.text);
-                print(descConroller.value.text);
-                print(selectedDate.toString());
-                print(selectedTime.format(context));
-                print(reminder);
-                taskModel.updateATask(index, titleController.value.text, descConroller.value.text, selectedDate, selectedTime, Helperutil().getNumberFromReminder(reminder));
               }, 
               child: Text("Save"),
             ),

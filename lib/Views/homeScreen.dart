@@ -236,7 +236,7 @@ class _HomeState extends State<HomeScreen>{
           // );
           //NAVIGATE TO ADD NEW TASK SCREEN 
           Navigator.pushNamed(context, "/addnew");
-          // NotificationHelper.scheduledNotification("TEST NOTIFICATION", "test successfully");
+          // print(tz.TZDateTime.now(tz.local));
         },
         child: Icon(Icons.add),  
       ),

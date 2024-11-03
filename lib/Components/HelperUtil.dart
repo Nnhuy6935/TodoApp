@@ -1,4 +1,8 @@
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:timezone/timezone.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class Helperutil {
   String convertDate(DateTime input){
@@ -31,5 +35,21 @@ class Helperutil {
     Random random = Random();
     
     return List.generate(10, (index) => characters[random.nextInt(characters.length)]).join();
+  }
+  DateTime combineDateTimeAndTimeOfDate(DateTime date, TimeOfDay time){
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+  }
+
+  TZDateTime convertDateTimeToTzDateTime(DateTime time){
+    tz.initializeTimeZones();
+    final location = tz.getLocation('Asia/Ho_Chi_Minh');
+    TZDateTime convert = tz.TZDateTime.from(time, location);
+    return convert;
   }
 }

@@ -4,6 +4,7 @@ import 'package:todo_app/Components/ColorStyle.dart';
 import 'package:todo_app/Components/HelperUtil.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Model/Task.dart';
+import 'package:todo_app/notification_helper.dart';
 
 class NewTaskScreen extends StatefulWidget{
   @override
@@ -35,13 +36,14 @@ class _NewTaskState extends State<NewTaskScreen>{
               String id = Helperutil().randomId();
               String title = titleController.value.text;
               String description = descConroller.value.text;
-              DateTime date = selectedDate;
+              DateTime date = Helperutil().combineDateTimeAndTimeOfDate(selectedDate, selectedTime);
               TimeOfDay hour = selectedTime;
               int remind = 0;
-              if(!reminder.contains("reminder"))
+              if(!reminder.contains("reminder")){
                 remind = Helperutil().getNumberFromReminder(reminder);
+              }
               StatusType status = StatusType.UPCOMING;
-              taskModel.addNewTask(Task(id,title,description,date,hour,remind,status));
+              taskModel.addNewTask(Task(id,title,description,date,hour,remind,status,-1));
               Navigator.pop(context);
             }, 
             child: Text("Save"),
@@ -139,7 +141,7 @@ class _NewTaskState extends State<NewTaskScreen>{
                           );
                           if(time != null){
                             setState(() {
-                              selectedTime = time;                              
+                              selectedTime = time;     
                             });
                           }
                         },

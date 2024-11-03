@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:todo_app/Components/HelperUtil.dart';
+import 'package:todo_app/Model/Task.dart';
 class NotificationHelper{
   static final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   // static final onClickNotification = BehaviorSubject<String>();
@@ -69,10 +70,33 @@ class NotificationHelper{
   }
 
   // schedule notification 
+  // static Future showScheduledNotification({
+  //   required String title,
+  //   required String body,
+  //   required String payload,
+  // }) async{
+  //   tz.initializeTimeZones();
+  //   const NotificationDetails notificationDetails = NotificationDetails(
+  //     android: AndroidNotificationDetails(
+  //       "Channel 3", 
+  //       "my channel 3",
+  //       channelDescription: 'my channel description',
+  //       importance: Importance.max,
+  //       priority: Priority.high,
+  //       ticker: 'ticker',
+  //     ),
+  //   );
+  //   await _flutterLocalNotificationsPlugin.zonedSchedule(2, title, body, 
+  //     tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)), 
+  //     notificationDetails, 
+  //     androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+  //     uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+  //     payload: payload,  
+  //   );
+  // }
+
   static Future showScheduledNotification({
-    required String title,
-    required String body,
-    required String payload,
+    required Task data
   }) async{
     tz.initializeTimeZones();
     const NotificationDetails notificationDetails = NotificationDetails(
@@ -85,13 +109,13 @@ class NotificationHelper{
         ticker: 'ticker',
       ),
     );
-    print(tz.TZDateTime.now(tz.local));
-    await _flutterLocalNotificationsPlugin.zonedSchedule(2, title, body, 
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)), 
+    await _flutterLocalNotificationsPlugin.zonedSchedule(data.taskIndex, data.taskTitle, Helperutil().convertToShortString(data.taskDescription), 
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)), 
+      Helperutil().convertDateTimeToTzDateTime(data.taskDate).subtract(Duration(minutes: data.taskReminder)),
       notificationDetails, 
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-      payload: payload,  
+      payload: data.taskDescription,  
     );
   }
 
