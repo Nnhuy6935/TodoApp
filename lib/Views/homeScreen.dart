@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/Components/ColorStyle.dart';
 import 'package:todo_app/Components/HelperUtil.dart';
@@ -8,6 +9,10 @@ import 'package:todo_app/Model/ManageSearchBox.dart';
 import 'package:todo_app/Model/ManageTaskState.dart';
 import 'package:todo_app/Model/Task.dart';
 import 'package:todo_app/Views/singleTask.dart';
+import 'package:todo_app/notification_helper.dart';
+
+import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -38,6 +43,7 @@ class _HomeState extends State<HomeScreen>{
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 50,),
               //SEARCH AREA 
               Row(
                 children: [
@@ -223,8 +229,14 @@ class _HomeState extends State<HomeScreen>{
       floatingActionButton: FloatingActionButton(
         backgroundColor: selectedButton,
         onPressed:(){
+          // NotificationHelper.showScheduledNotification(
+          //   title: "Periodic Notification", 
+          //   body: "This is the periodic notification", 
+          //   payload: "This is periodic data"
+          // );
           //NAVIGATE TO ADD NEW TASK SCREEN 
           Navigator.pushNamed(context, "/addnew");
+          // NotificationHelper.scheduledNotification("TEST NOTIFICATION", "test successfully");
         },
         child: Icon(Icons.add),  
       ),
